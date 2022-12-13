@@ -17,8 +17,8 @@ gb = {1,13,6,7}
 test = false
 
 function _init()
-    init_bump(0,0,128*8-1,128*8-1,16)
     init_camera()
+    init_grid()
    
     now_input = {}
     mouse.init()
@@ -41,11 +41,10 @@ end
 function _draw()
     sys.func_draw() 
     print(mouse_x.." "..mouse_y,mouse_x,mouse_y,10)
-    print(back_bump(mouse_x,mouse_y),mouse_x,mouse_y+8,11)
     pset(mouse_x,mouse_y,14)
 
     if(mouse_btn==2)then
-        draw_bump()
+        draw_grid()
     end
     --cpu
     cursor(cam_x+1,cam_y+1,stat(1)<1 and 9 or 8)
@@ -57,12 +56,10 @@ end
 function init_game()
     sys.func_update = update_game
     sys.func_draw = draw_game
-    make_player()
-    make_normal_box(32,32)
+    load_map_whole()
 end
 
 function update_game()
-    update_bump()
     for obj in all(objects) do
         obj:update()
     end

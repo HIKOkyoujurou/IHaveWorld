@@ -1,10 +1,11 @@
 -->8 player
 player = nil
 grid = 8
-function make_player()
-    local p = make_object("player",64,64,1)
+function make_player(x,y)
+    local p = make_object("player",x,y,1)
     player =p
     p.aim = key_l
+    p.spr_y = 0
     p.idle_sprs ={{1,2},{17,18},{33,34},{49,50}}
     p.update = function(p)
         local dx,dy = 0,0

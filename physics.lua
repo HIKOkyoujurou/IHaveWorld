@@ -1,33 +1,4 @@
 
-function object.just_move(self)
-    self.spd_x += self.acs_x
-    self.spd_y += self.acs_y
-    self.acs_x,self.acs_y = 0,0
-
-    self:move_x(self.spd_x)
-    self:move_y(self.spd_y)
-
-    self.spd_x *= self.friction
-    self.spd_y *= self.friction
-end
-function object.move_x(self,x)
-    self.remainder_x +=x
-    local cx = flr(self.remainder_x)
-    self.remainder_x -= cx
-
-    local total = cx
-    local vecx = sgn(cx)
-    while cx !=0
-    do
-        if self:check_solid(vecx,0) then
-            crash(self,true)
-            return true
-        end
-        self.x +=vecx
-        cx -= vecx
-    end 
-    return false
-end
 function object.move_y(self,y)
     self.remainder_y +=y
     local cy = flr(self.remainder_y)
@@ -73,7 +44,6 @@ end
 function check_position_solid(x,y,self)
 
 
-    local bb = back_bump(x,y)
 
     if check_map_collide(x,y) then
         return true
@@ -84,27 +54,19 @@ function check_position_solid(x,y,self)
         return true
     end
 
-    if bumps[bb] then
-        for o in all(bumps[bb].m) do
-            if o~=self and o.is_solid and
-            (o.x+o.hit_l <=x and o.x+o.hit_r >=x 
-            and o.y+o.hit_u <=y and o.y+o.hit_d >=y) then
+    -- if bumps[bb] then
+    --     for o in all(bumps[bb].m) do
+    --         if o~=self and o.is_solid and
+    --         (o.x+o.hit_l <=x and o.x+o.hit_r >=x 
+    --         and o.y+o.hit_u <=y and o.y+o.hit_d >=y) then
                 
-                return true
+    --             return true
                 
-            end
-        end
-    else
-        return true
-    end
-
-    -- if x<0 or x>128 or y<0 or y>128 then
-    --     self.spd_x *=-1
-    --     self.spd_y *=-1
+    --         end
+    --     end
+    -- else
+    --     return true
     -- end
-
-    --out of camera
-    -- return x<0 or x>128 or y<0 or y>128
 
     
 end

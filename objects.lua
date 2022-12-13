@@ -12,6 +12,7 @@ object.hit_l = 1
 object.hit_r = 7
 object.hit_u = 1
 object.hit_d = 7
+object.spr_y = 0
 object.friction = 0.9
 object.is_solid = true
 object.test = true
@@ -19,20 +20,23 @@ object.test = true
 object.is_flip = false
 
 object.draw = function(self)
+    if self.x<cam_x or self.x>cam_x+128 or self.y<cam_y or self.y>cam_y+128 then
+        return
+    end
     for c = 1,#gb do
         pal(gb[c],gb[1])
     end
 
     for i = -1,1,1 do
         for j = -1,1,1 do
-            spr(self.spr,self.x+i,self.y-3+j,1,1,self.is_flip)
+            spr(self.spr,self.x+i,self.y+self.spr_y+j,1,1,self.is_flip)
         end
     end
 
     for c = 1,#gb do
         pal(gb[c],gb[c])
     end
-    spr(self.spr,self.x,self.y-3,1,1,self.is_flip)
+    spr(self.spr,self.x,self.y+self.spr_y,1,1,self.is_flip)
 end
 object.draw_front = function(self)
 
