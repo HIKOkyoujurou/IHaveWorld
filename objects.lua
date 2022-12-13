@@ -2,8 +2,6 @@ objects = {}
 obj_meta = {}
 
 object = {}
-object.remainder_x = 0
-object.remainder_y = 0
 object.spd_x =0
 object.spd_y =0
 object.acs_x =0
@@ -13,6 +11,8 @@ object.hit_r = 7
 object.hit_u = 1
 object.hit_d = 7
 object.spr_y = 0
+object.grid_x = 0
+object.grid_x = 0
 object.friction = 0.9
 object.is_solid = true
 object.test = true
@@ -58,6 +58,8 @@ function make_object(name,x,y,spr)
     o.name = name
     o.spr = spr
     o.x,o.y = x,y
+    o.grid_x,o.grid_y = x\8,y\8
+    add_grid(x\8,y\8,o)
     setmetatable(o,obj_meta)
     add(objects,o)
     return o

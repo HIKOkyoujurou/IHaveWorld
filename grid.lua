@@ -1,7 +1,7 @@
 
 grid ={}
-cell =3
-grid_size = 16
+cell =16
+grid_size = 8
 
 function init_grid()
     grid = {}
@@ -9,7 +9,7 @@ function init_grid()
         local t = {}
         
         for y = 1,cell do
-            add(t,{name ="2"})
+            add(t,nil)
         end
         add(grid,t)
     end
@@ -23,11 +23,16 @@ end
 function draw_grid()
     for x = 1,cell do
         for y = 1,cell do
-            cursor(x*grid_size,y*grid_size,10)
-            print(grid[x][y].name)
-            -- for g in all(grid) do
-            --     print(g)
-            -- end
+            if grid[x][y] then
+                print(grid[x][y].name,x*grid_size-grid_size,y*grid_size-grid_size,10)
+                print("x:"..x.."y:"..y,x*grid_size-grid_size,8+y*grid_size-grid_size,10)
+            end
         end
     end
+end
+
+function add_grid(x,y,obj)
+    -- assert((x<1 or y<1 or x>cell or y>cell),"out of grid area")
+    -- assert(grid[x][y],"there is already object")
+    grid[x][y] = obj
 end
