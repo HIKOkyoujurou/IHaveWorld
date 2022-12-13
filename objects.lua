@@ -1,32 +1,72 @@
--->8
---objects
-objects ={}
-obj_meta ={}
+objects = {}
+obj_meta = {}
 
-obj ={}
-obj.name ="object"
-obj.x = 64
-obj.y = 64
-obj.spr = 0
-obj.is_flip = false
+object = {}
+object.remainder_x = 0
+object.remainder_y = 0
+object.spd_x =0
+object.spd_y =0
+object.acs_x =0
+object.acs_y =0
+object.hit_l = 1
+object.hit_r = 7
+object.hit_u = 1
+object.hit_d = 7
+object.friction = 0.9
+object.is_solid = true
+object.test = true
 
-obj.update = nil_function
+object.is_flip = false
 
-obj.draw = function(o)
-    spr(o.spr,o.x,o.y)
+object.draw = function(self)
+    for c = 1,#gb do
+        pal(gb[c],gb[1])
+    end
+
+    for i = -1,1,1 do
+        for j = -1,1,1 do
+            spr(self.spr,self.x+i,self.y-3+j,1,1,self.is_flip)
+        end
+    end
+
+    for c = 1,#gb do
+        pal(gb[c],gb[c])
+    end
+    spr(self.spr,self.x,self.y-3,1,1,self.is_flip)
 end
-obj.draw_back =nil_function
-obj.draw_front =nil_function
+object.draw_front = function(self)
 
-obj_meta.__index = obj
+end
+object.draw_back = function(self)
+    -- circfill(self.x+3,self.y+5,2,gb[1])
+    -- spr(0,self.x,self.y-2,1,1,self.is_flip)
+
+end
+
+object.update = function(self)
+
+end
+
+obj_meta.__index = object
 
 function make_object(name,x,y,spr)
     local o ={}
     o.name = name
-    o.x = x
-    o.y = y
     o.spr = spr
+    o.x,o.y = x,y
     setmetatable(o,obj_meta)
     add(objects,o)
     return o
 end
+
+function change_grid_to_pos(x,y)
+    return x,y
+end
+
+function set_physics(self,l,r,u,d)
+    self.hit_l = l
+    self.hit_r = r
+    self.hit_u = u
+    self.hit_d = d
+end
+

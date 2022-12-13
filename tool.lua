@@ -6,6 +6,7 @@ function sprint(tx,x,y,col1,col2)
 end
 
 function frame_to_table(table,baisoku)
+    baisoku = baisoku or 1
     local max = 30/baisoku 
     local f = frame%max/max
     return table[1+flr(#table*f)]

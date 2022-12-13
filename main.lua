@@ -1,14 +1,25 @@
--->8 main
 frame =0
 debug = false
 
+--keys
+key_l = 0
+key_r = 1
+key_u = 2
+key_d = 3
+key_z = 4
+key_x = 5
 
-nil_function = function()end
+--cols
+gb_spr= {1,13,6,7}
+gb = {1,13,6,7}
+
 --debug
 test = false
 
 function _init()
-
+    init_bump(0,0,128*8-1,128*8-1,16)
+    init_camera()
+   
     now_input = {}
     mouse.init()
     frame = 0
@@ -17,32 +28,41 @@ function _init()
 end
 
 function _update()
+    update_camera()
     frame=((frame+1)%30)
     mouse_x,mouse_y = mouse.pos()
+    mouse_before = mouse_btn
+    
     mouse_btn = mouse.button()
-    check_update()
-
-    local p = make_particle(mouse_x,mouse_y,rnd({7,8,9}))
-    p.gravity = 1
-    p.change_size =0.9
-
+    
     sys.func_update()
 end
 
 function _draw()
-    sys.func_draw()
+    sys.func_draw() 
     print(mouse_x.." "..mouse_y,mouse_x,mouse_y,10)
+    print(back_bump(mouse_x,mouse_y),mouse_x,mouse_y+8,11)
     pset(mouse_x,mouse_y,14)
 
+    if(mouse_btn==2)then
+        draw_bump()
+    end
+    --cpu
+    cursor(cam_x+1,cam_y+1,stat(1)<1 and 9 or 8)
+    print(stat(1))
+    print("obs:"..#objects)
+    print("camera:"..cam_x..","..cam_y)
 end
 
 function init_game()
     sys.func_update = update_game
     sys.func_draw = draw_game
-
+    make_player()
+    make_normal_box(32,32)
 end
 
 function update_game()
+    update_bump()
     for obj in all(objects) do
         obj:update()
     end
@@ -53,7 +73,7 @@ function update_game()
 end
 
 function draw_game()
-    cls(1)
+    cls(gb[3])
     for part in all(particles) do
         part:draw_back()
     end
@@ -61,18 +81,26 @@ function draw_game()
     for obj in all(objects) do
         obj:draw_back()
     end
+    map(0,0,0,0,128,128,4)
+
+    map(0,0,0,0,128,128,1)
     for part in all(particles) do
         part:draw()
     end
+    
     for obj in all(objects) do
         obj:draw()
     end
+    map(0,0,0,0,128,128,2)
+
     for part in all(particles) do
         part:draw_front()
     end
     for obj in all(objects) do
         obj:draw_front()
     end
+
+    print(test,32,1,9)
 end
 
 mouse = {
@@ -94,19 +122,3 @@ mouse = {
     end,
   }
 
---music tool
-function se(tbl)
-    local num = tbl
-    if type(tbl) == "table" then
-        num = rnd(tbl)--tbl[rnd_int(1,#tbl)]
-    end
-    sfx(num,3)
-end
-
-function music_play(num)
-    num = music_on_off and num or -1
-    if now_music ~= num then
-        music(num)
-        now_music = num
-    end
-end
