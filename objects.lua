@@ -10,11 +10,13 @@ object.hit_l = 1
 object.hit_r = 7
 object.hit_u = 1
 object.hit_d = 7
-object.spr_y = 0
+object.spr_y = -3
 object.grid_x = 0
 object.grid_x = 0
+object.on_grid = true
 object.friction = 0.9
 object.is_solid = true
+object.can_get = false
 object.test = true
 
 object.is_flip = false
@@ -59,8 +61,8 @@ function make_object(name,x,y,spr)
     o.spr = spr
     o.x,o.y = x,y
     o.grid_x,o.grid_y = x\8,y\8
-    add_grid(x\8,y\8,o)
     setmetatable(o,obj_meta)
+    o:act_move(o.grid_x,o.grid_y)
     add(objects,o)
     return o
 end

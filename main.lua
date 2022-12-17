@@ -71,13 +71,23 @@ end
 
 function draw_game()
     cls(gb[3])
+    local gx_s,gx_e,gy_s,gy_e = now_showing_grid()
+
     for part in all(particles) do
         part:draw_back()
     end
-    
-    for obj in all(objects) do
-        obj:draw_back()
+
+  
+    for x = gx_s,gx_e do
+        for y= gy_s,gy_e do
+            local g = get_grid(x,y)
+            if g then g:draw_back() end
+        end
     end
+    
+    -- for obj in all(objects) do
+    --     obj:draw_back()
+    -- end
     map(0,0,0,0,128,128,4)
 
     map(0,0,0,0,128,128,1)
@@ -85,17 +95,31 @@ function draw_game()
         part:draw()
     end
     
-    for obj in all(objects) do
-        obj:draw()
+    for x = gx_s,gx_e do
+        for y= gy_s,gy_e do
+            local g = get_grid(x,y)
+            if g then g:draw() end
+        end
     end
+    -- for obj in all(objects) do
+    --     obj:draw()
+    -- end
     map(0,0,0,0,128,128,2)
 
     for part in all(particles) do
         part:draw_front()
     end
-    for obj in all(objects) do
-        obj:draw_front()
+
+    
+    for x = gx_s,gx_e do
+        for y= gy_s,gy_e do
+            local g = get_grid(x,y)
+            if g then g:draw_front() end
+        end
     end
+    -- for obj in all(objects) do
+    --     obj:draw_front()
+    -- end
 
     print(test,32,1,9)
 end
