@@ -2,7 +2,8 @@
 player = nil
 grid = 8
 
-key_get = key_x
+key_sword = key_x
+move_time = 3
 
 function make_player(x,y)
     local p = make_object("player",x,y,1)
@@ -11,27 +12,38 @@ function make_player(x,y)
     p.have_block = nil
     p.spr_y = -3
     p.idle_sprs ={{1,2},{17,18},{33,34},{49,50}}
+    p.input_key = -1
+    p.input_time = 0
     p.update = function(p)
 
         --move
         local dx,dy = 0,0
         local idle = true
-        if btnp(key_l) then
-            dx=-1
-            p.aim = key_l
-        elseif btnp(key_r) then
-            dx=1
-            p.aim = key_r
 
-        elseif btnp(key_u) then
-            dy=-1
-            p.aim = key_u
-
-        elseif btnp(key_d) then
-            dy=1
-            p.aim = key_d
-        end
+        local a = p.aim
         
+        if btn(a) then
+            p.input_time -=1
+
+            if p.input_time <= 0 then
+                dx,dy = move(a)
+                p.input_time =move_time
+
+            end
+
+        else
+
+        end
+
+        for i = key_l,key_d do
+            if btnp(i) then
+                if i != p.aim then
+                    p.input_time = move_time
+                end
+                p.aim = i
+            end
+        end
+
         if dx ~= 0 or dy~=0 then
             if p:grid_move(dx,dy) then
                 p:act_move(p.grid_x +dx,p.grid_y +dy)
@@ -41,52 +53,14 @@ function make_player(x,y)
         p.x = p.grid_x*8
         p.y = p.grid_y*8
 
-        --get_block
-        if btnp(key_get) then
-            local gx,gy = p.grid_x,p.grid_y
-
-            if p.aim == key_l then
-                gx-=1
-            elseif p.aim == key_r then
-                gx+=1
-            elseif p.aim == key_u then
-                gy-=1
-            elseif p.aim == key_d then
-                gy+=1
-            end
-
-                
-            local name,b = check_grid_info(gx,gy)
-            if not p.have_block then
-                test = "try to get"
-                if name =="block" then
-                    if b.can_get then
-                        test= "can get"
-                        p.have_block = b
-                        b.is_have= true
-                        delete_grid(gx,gy)
-                    end
-                end
-            else
-                test = "try to release"
-
-                if name == false then
-                    test= "can release"
-                    p.have_block:act_move(gx,gy)
-                    p.have_block.is_have = false
-                    p.have_block = nil
-                end
-            end
+        if btnp(key_sword) then
+            
         end
 
         local s_no = frame_to_no(#p.idle_sprs[p.aim+1])
-        -- p.spr = frame_to_table(p.idle_sprs[p.aim+1])
         p.spr = p.idle_sprs[p.aim+1][s_no]
 
-        if p.have_block then
-            p.have_block.x = p.x
-            p.have_block.y = p.y-8+s_no
-        end
+
     end
     p.draw= function(p)
         object.draw(p)
@@ -99,4 +73,18 @@ function make_player(x,y)
             object.draw(p.have_block)
         end
     end
+end
+
+function move(a)
+    local dx,dy = 0,0
+    if a == key_l then
+        dx=-1
+    elseif a == key_r then
+        dx=1
+    elseif a == key_u then
+        dy=-1
+    elseif a == key_d then
+        dy=1
+    end
+    return dx,dy
 end

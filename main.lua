@@ -121,7 +121,7 @@ function draw_game()
     --     obj:draw_front()
     -- end
 
-    print(test,32,1,9)
+    print(test,32,1,8)
 end
 
 mouse = {

@@ -33,7 +33,6 @@ end
 
 
 function get_grid(x,y)
-    -- assert((x<1 or y<1 or x>cell or y>cell),"out of grid area:")
     x+=1
     y+=1
     if (x<1 or y<1 or x>cell or y>cell) then

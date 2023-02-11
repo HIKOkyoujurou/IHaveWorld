@@ -21,6 +21,7 @@ function object.grid_move(self,x,y)
     
     x += self.grid_x
     y += self.grid_y
+    
     if check_solid_grid(x,y) then
         return false
     else

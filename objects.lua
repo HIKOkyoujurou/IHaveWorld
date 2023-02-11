@@ -18,6 +18,9 @@ object.friction = 0.9
 object.is_solid = true
 object.can_get = false
 object.test = true
+object.move_time = 0
+object.move_spd = 0
+object.move_angle = -1
 
 object.is_flip = false
 
@@ -50,7 +53,33 @@ object.draw_back = function(self)
 end
 
 object.update = function(self)
+    self:move()
+    self:grid_pos()
+end
 
+object.grid_pos = function(self)
+    self.x = self.grid_x*8
+    self.y = self.grid_y*8
+end
+
+object.move = function(self)
+
+    if self.move_angle == -1 then
+        return
+    end
+    self.move_time-=1
+    
+    if self.move_time <=0 then
+        self.move_time = self.move_spd
+        local dx,dy = move(self.move_angle)
+
+        if self:grid_move(dx,dy) then
+            self:act_move(self.grid_x+dx,self.grid_y+dy)
+        else
+            self.move_spd = 0
+            self.move_angle = -1
+        end
+    end
 end
 
 obj_meta.__index = object
@@ -76,5 +105,9 @@ function set_physics(self,l,r,u,d)
     self.hit_r = r
     self.hit_u = u
     self.hit_d = d
+end
+
+function move_it()
+
 end
 
